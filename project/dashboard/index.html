@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Sederhana</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>📊 Dashboard</h2>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Chart</a></li>
+      <li><a href="#">Tabel</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <h1>Data Analyst Portofolio</h1>
+    <div class="card">
+      <h3>Ringkasan Data</h3>
+      <p>Jumlah data: 5000+</p>
+    </div>
+
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <div class="card">
+      <h3>Tabel Data</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Nilai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ani</td>
+            <td>80</td>
+          </tr>
+          <tr>
+            <td>Budi</td>
+            <td>75</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="chart.js"></script>
+</body>
+</html>
