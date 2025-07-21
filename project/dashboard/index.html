@@ -3,52 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Sederhana</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Dashboard Penjualan</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #salesPie {
+      width: 90vw;
+      max-width: 1000px;
+      height: 60vw;
+      max-height: 500px;
+      margin: auto;
+      padding-bottom: 40px;
+      min-width: 280px;
+      min-height: 280px;
+      background: none;
+    }
+    @media (max-width: 600px) {
+      #salesPie {
+        max-width: 95vw;
+        max-height: 350px;
+        height: 60vw;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>📊 Dashboard</h2>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Chart</a></li>
-      <li><a href="#">Tabel</a></li>
-    </ul>
-  </div>
+  <h1>Dashboard Penjualan</h1>
+  <div id="salesPie"></div>
+  <script>
+    fetch('sales_data.csv')
+      .then(response => response.text())
+      .then(text => {
+        const rows = text.trim().split('\n');
+        // Kolom: Tanggal,Produk,Region,Penjualan
+        const produkSales = {};
+        rows.slice(1).forEach(row => {
+          const values = row.split(',');
+          const produk = values[1];
+          const penjualan = parseInt(values[3]);
+          if (!produkSales[produk]) produkSales[produk] = 0;
+          produkSales[produk] += penjualan;
+        });
+        const labels = Object.keys(produkSales);
+        const dataPie = Object.values(produkSales);
+        var chart = echarts.init(document.getElementById('salesPie'));
+        var option = {
+          title: {
+            text: 'Distribusi Penjualan per Produk',
+            left: 'center',
+            top: 20,
+            textStyle: {
+              fontSize: 16,
+              color: '#2980b9'
+            },
+            
+          },
+          
+          series: [
+            {
+              name: 'Persen',
+              type: 'pie',
+              radius: ['0%', '55%'],
+              center: ['50%', '55%'],
+              data: labels.map(function(label, i) { return { value: dataPie[i], name: label }; }),
+              label: {
+                show: true,
+                position: 'inside',
+                fontSize: 13,
+                fontWeight: 'bold',
+                formatter: '{d}%'
+              },
+              labelLine: {
+                show: false
+              },
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: '#ffff',
+                borderWidth: 2
+              }
+        
+            },
 
-  <div class="main-content">
-    <h1>Data Analyst Portofolio</h1>
-    <div class="card">
-      <h3>Ringkasan Data</h3>
-      <p>Jumlah data: 5000+</p>
-    </div>
+            {
+              name: 'label luar',
+              type: 'pie',
+              radius: ['0%', '55%'],
+              center: ['50%', '55%'],
+              data: labels.map(function(label, i) { return { value: dataPie[i], name: label }; }),
+             
+              label: {
+                show: true,
+                position: 'outside',
+                fontSize: 13,
+                //fontWeight: 'normal',
+                formatter: '{b}'
+              },
+              labelLine: {
+                length: 12,
+                length2: 10
+              },
+              silent: true
+            }
+          ]
 
-    <canvas id="myChart" width="400" height="200"></canvas>
-
-    <div class="card">
-      <h3>Tabel Data</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Nilai</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Ani</td>
-            <td>80</td>
-          </tr>
-          <tr>
-            <td>Budi</td>
-            <td>75</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script src="chart.js"></script>
+        };
+        chart.setOption(option);
+        window.addEventListener('resize', () => {
+          chart.resize();
+        });
+      });
+  </script>
 </body>
 </html>
